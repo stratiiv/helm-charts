@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: frontend
+        image: stratiiv/schedule-frontend # need to be changed 
+
+        - name: BACKEND_DNS
+          value: "backend-service.app.svc.cluster.local"  # Replace with your actual backend service DNS or service name
+  #     volumeMounts:
+  #     - name: nginx-config
+  #       mountPath: /etc/nginx/nginx.conf.template
+  #       subPath: nginx.conf.template
+  # volumes:
+  # - name: nginx-config
+  #   configMap:
+  #     name: nginx-config
