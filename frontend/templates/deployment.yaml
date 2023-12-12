@@ -18,7 +18,7 @@ spec:
         image: stratiiv/schedule-frontend # need to be changed 
 
         - name: BACKEND_DNS
-          value: "backend-service.app.svc.cluster.local"  # Replace with your actual backend service DNS or service name
+          value: "backend-service.app.svc.cluster.local" 
   #     volumeMounts:
   #     - name: nginx-config
   #       mountPath: /etc/nginx/nginx.conf.template
