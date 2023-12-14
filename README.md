@@ -17,6 +17,8 @@ This repository contains Helm charts for deploying the backend and frontend comp
 kubectl create namespace app
 kubectl create secret generic pg-user-pass --from-literal=username=<your_username> --from-literal=password=<your_password> -n app
 ```
+#### Configuration
+! Before you deploy, make sure to adjust values.yaml files for your needs !
 
 ### Backend Chart
 
@@ -52,6 +54,5 @@ kubectl create secret generic pg-user-pass --from-literal=username=<your_usernam
     helm install <release-name> frontend
     ```
     
-#### Configuration
-Customize your deployment by replacing values in the values.yaml file in each chart
+
 
