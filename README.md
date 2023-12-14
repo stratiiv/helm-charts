@@ -12,6 +12,11 @@ This repository contains Helm charts for deploying the backend and frontend comp
 
 - Kubernetes cluster
 - Helm installed ([Helm Installation Guide](https://helm.sh/docs/intro/install/))
+- "app" namespace and "pg-user-pass" secrets in Kubernetes cluster
+```bash
+kubectl create namespace app
+kubectl create secret generic pg-user-pass --from-literal=username=<your_username> --from-literal=password=<your_password> -n app
+```
 
 ### Backend Chart
 
