@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName }}
+  name: backend
   namespace: {{ .Values.namespace }}
-  labels:
-    app: {{ .Values.appName }}
 spec:
   replicas: {{ .Values.replicasCount }}
   selector: 
     matchLabels:
       app: {{ .Values.appName }}
+      tier: backend
   template:
     metadata:
       labels:
         app: {{ .Values.appName }}
+        tier: backend
     spec:
       containers:
       - name: "backend"
@@ -25,7 +25,7 @@ spec:
         - name: "PG_HOST"
           value: {{ .Values.postgres.host }}
         - name: "PG_PORT"
-          value: {{ .Values.postgres.port }}
+          value: {{ .Values.postgres.port | quote }}
         - name: "PG_DB_NAME"
           value: {{ .Values.postgres.db_name }}
         - name: "PG_USER"
@@ -39,32 +39,32 @@ spec:
               name: pg-user-pass
               key: password
         - name: "REDIS_HOST"
-          value: "localhost"
-        - name: "REDIS_PORT"
           value: {{ .Values.redis.host }}
+        - name: "REDIS_PORT"
+          value: {{ .Values.redis.port | quote }}
         - name: "MONGO_HOST"
-          value: {{ .Values.mongodb.host }}
+          value: {{ .Values.mongodb.host}}
         - name: "MONGO_PORT"
-          value: {{ .Values.mongodb.port }}
+          value: {{ .Values.mongodb.port | quote }}
         - name: "MONGO_DB_NAME"
           value: {{ .Values.mongodb.db_name }}
       - name: "redis"
         image: "redis:7-alpine"
-      - name: "postgresql"
-        image: "postgres:14-alpine"
-        env:
-        - name: "POSTGRES_DB"
-          value: {{ .Values.postgres.db_name}}
-        - name: "POSTGRES_USER"
-          valueFrom:
-            secretKeyRef:
-              name: pg-user-pass
-              key: username
-        - name: "POSTGRES_PASSWORD"      
-          valueFrom:
-            secretKeyRef:
-              name: pg-user-pass
-              key: password
+      # - name: "postgresql"
+      #   image: "postgres:14-alpine"
+      #   env:
+      #   - name: "POSTGRES_DB"
+      #     value: {{ .Values.postgres.db_name }}
+      #   - name: "POSTGRES_USER"
+      #     valueFrom:
+      #       secretKeyRef:
+      #         name: pg-user-pass
+      #         key: username
+      #   - name: "POSTGRES_PASSWORD"      
+      #     valueFrom:
+      #       secretKeyRef:
+      #         name: pg-user-pass
+      #         key: password
 
 
 

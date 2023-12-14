@@ -2,28 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
-  namespace: app
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicasCount }}
   selector:
     matchLabels:
-      app: frontend
+      app: {{ .Values.appName }}
+      tier: frontend
   template:
     metadata:
       labels:
-        app: nginx
+        app: {{ .Values.appName }}
+        tier: frontend
     spec:
       containers:
       - name: frontend
-        image: stratiiv/schedule-frontend # need to be changed 
+        image: "{{ .Values.frontend_image.name }}:{{ .Values.frontend_image.tag }}"
 
-        - name: BACKEND_DNS
-          value: "backend-service.app.svc.cluster.local" 
-  #     volumeMounts:
-  #     - name: nginx-config
-  #       mountPath: /etc/nginx/nginx.conf.template
-  #       subPath: nginx.conf.template
-  # volumes:
-  # - name: nginx-config
-  #   configMap:
-  #     name: nginx-config
