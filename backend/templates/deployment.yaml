@@ -4,19 +4,42 @@ kind: Deployment
 metadata:
   name: backend
   namespace: {{ .Values.namespace }}
+  labels:
+    app: backend
 spec:
   replicas: {{ .Values.replicasCount }}
   selector: 
     matchLabels:
-      app: {{ .Values.appName }}
-      tier: backend
+      app: backend
+      service: backend
   template:
     metadata:
       labels:
-        app: {{ .Values.appName }}
-        tier: backend
+        app: backend
+        service: backend
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
     spec:
+      serviceAccountName: backend
       containers:
+      - name: "postgresql"
+        image: "postgres:14-alpine"
+        imagePullPolicy: Always
+        env:
+        - name: "POSTGRES_DB"
+          value: {{ .Values.postgres.db_name }}
+        - name: "POSTGRES_USER"
+          valueFrom:
+            secretKeyRef:
+              name: pg-user-pass
+              key: username
+        - name: "POSTGRES_PASSWORD"      
+          valueFrom:
+            secretKeyRef:
+              name: pg-user-pass
+              key: password
+      - name: "redis"
+        image: "redis:7-alpine"
       - name: "backend"
         image: "{{ .Values.backend_image.name }}:{{ .Values.backend_image.tag }}"
         ports: 
@@ -48,23 +71,8 @@ spec:
           value: {{ .Values.mongodb.port | quote }}
         - name: "MONGO_DB_NAME"
           value: {{ .Values.mongodb.db_name }}
-      - name: "redis"
-        image: "redis:7-alpine"
-      # - name: "postgresql"
-      #   image: "postgres:14-alpine"
-      #   env:
-      #   - name: "POSTGRES_DB"
-      #     value: {{ .Values.postgres.db_name }}
-      #   - name: "POSTGRES_USER"
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: pg-user-pass
-      #         key: username
-      #   - name: "POSTGRES_PASSWORD"      
-      #     valueFrom:
-      #       secretKeyRef:
-      #         name: pg-user-pass
-      #         key: password
+
+
 
 
 

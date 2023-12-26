@@ -1,7 +1,7 @@
 appName: class-schedule
-serviceName: frontend-service
+serviceName: frontend
 namespace: app
 replicasCount: 1
 frontend_image:
   name: stratiiv/schedule-frontend
-  tag: v1
+  tag: test-6 # has to be configured

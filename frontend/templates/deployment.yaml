@@ -7,15 +7,24 @@ spec:
   replicas: {{ .Values.replicasCount }}
   selector:
     matchLabels:
-      app: {{ .Values.appName }}
+      app: frontend
       tier: frontend
+      service: frontend
   template:
     metadata:
       labels:
-        app: {{ .Values.appName }}
+        app: frontend
         tier: frontend
+        service: frontend
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
     spec:
+      serviceAccountName: frontend
       containers:
       - name: frontend
         image: "{{ .Values.frontend_image.name }}:{{ .Values.frontend_image.tag }}"
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
+          
 
